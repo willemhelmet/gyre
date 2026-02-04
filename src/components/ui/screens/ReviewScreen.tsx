@@ -14,12 +14,10 @@ export const ReviewScreen = () => {
   const setSceneUrl = useMyStore((state) => state.setSceneUrl);
 
   const [refinementPrompt, setRefinementPrompt] = useState(prompt);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [pipelineStatus, setPipelineStatus] = useState("");
-  const [selectedModel, setSelectedModel] = useState<
-    "Marble 0.1-mini" | "Marble 0.1-plus"
-  >("Marble 0.1-plus");
-  const [, setLocation] = useLocation();
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [pipelineStatus, setPipelineStatus] = useState("");
+    const [selectedModel, setSelectedModel] = useState<"Marble 0.1-mini" | "Marble 0.1-plus">("Marble 0.1-mini");
+    const [, setLocation] = useLocation();
 
   const handleReroll = async () => {
     setIsProcessing(true);

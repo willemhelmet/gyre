@@ -3,11 +3,13 @@ import {
   CameraControls,
   KeyboardControls,
   PointerLockControls,
+  Stats,
 } from "@react-three/drei";
 import { Scene } from "../Scene.tsx";
 import { MobileControls } from "./MobileControls.tsx";
 import { useMyStore } from "../store/store.ts";
 import { PauseMenu } from "./ui/PauseMenu.tsx";
+import { DecartStream } from "./DecartStream.tsx";
 
 export const World = () => {
   const isMobile = useMyStore((state) => state.isMobile);
@@ -55,36 +57,51 @@ export const World = () => {
           </div>
         </div>
       )}
-      <div className="flex h-screen w-screen">
-        <KeyboardControls
-          map={[
-            { name: "forward", keys: ["ArrowUp", "KeyW"] },
-            { name: "backward", keys: ["ArrowDown", "KeyS"] },
-            { name: "leftward", keys: ["ArrowLeft", "KeyA"] },
-            { name: "rightward", keys: ["ArrowRight", "KeyD"] },
-            { name: "pause", keys: ["Escape"] },
-          ]}
-        >
-          {isMobile && status === "playing" && <MobileControls />}
-          <Canvas
-            gl={{ antialias: false }}
-            dpr={1}
-            camera={{
-              position: [0, 1.5, 0],
-              rotation: [0, 0, 0],
-            }}
-          >
-            <Scene />
-            {!isMobile && (
-              <PointerLockControls
-                selector="#playButton"
-                onUnlock={handleUnlock}
-                onLock={handleLock}
-              />
-            )}
-            {isMobile && <CameraControls smoothTime={0} />}
-          </Canvas>
-        </KeyboardControls>
+      
+      {/* 
+        DECART CONSTRAINT:
+        The canvas must be exactly 1280x704 for the Mirage model.
+        We center it in the viewport with a black background.
+      */}
+      <div className="flex h-screen w-screen items-center justify-center bg-black">
+        <div style={{ width: "1280px", height: "704px", position: "relative" }}>
+            
+            <DecartStream canvasId="three-canvas" />
+
+            <KeyboardControls
+            map={[
+                { name: "forward", keys: ["ArrowUp", "KeyW"] },
+                { name: "backward", keys: ["ArrowDown", "KeyS"] },
+                { name: "leftward", keys: ["ArrowLeft", "KeyA"] },
+                { name: "rightward", keys: ["ArrowRight", "KeyD"] },
+                { name: "pause", keys: ["Escape"] },
+            ]}
+            >
+            {isMobile && status === "playing" && <MobileControls />}
+            <Canvas
+                onCreated={({ gl }) => {
+                    gl.domElement.id = "three-canvas";
+                }}
+                gl={{ antialias: false, preserveDrawingBuffer: true }}
+                dpr={1}
+                camera={{
+                position: [0, 1.5, 0],
+                rotation: [0, 0, 0],
+                }}
+            >
+                <Scene />
+                {!isMobile && (
+                <PointerLockControls
+                    selector="#playButton"
+                    onUnlock={handleUnlock}
+                    onLock={handleLock}
+                />
+                )}
+                {isMobile && <CameraControls smoothTime={0} />}
+            </Canvas>
+            </KeyboardControls>
+            <Stats />
+        </div>
       </div>
     </>
   );

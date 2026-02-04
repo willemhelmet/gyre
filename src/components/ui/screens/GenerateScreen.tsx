@@ -39,7 +39,6 @@ export const GenerateScreen = () => {
       const dataUrl = e.target?.result as string;
       if (dataUrl) {
         setGeneratedImage(dataUrl);
-        setPrompt("User uploaded image"); 
       }
     };
     reader.readAsDataURL(file);
