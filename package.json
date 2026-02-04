@@ -25,6 +25,7 @@
     "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.17",
     "three": "^0.181.2",
+    "wouter": "^3.9.0",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
