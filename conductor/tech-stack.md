@@ -2,6 +2,7 @@
 
 ## Frontend
 - **Framework:** React 19
+- **Routing:** wouter
 - **3D Rendering:** Three.js with `@react-three/fiber` and `@react-three/drei`
 - **Styling:** Tailwind CSS v4 (with Glassmorphism focus)
 - **State Management:** Zustand
