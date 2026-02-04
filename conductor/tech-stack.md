@@ -14,6 +14,7 @@
   - SDK: @google/genai
 - **3D Reconstruction:** Marble World Labs API (Gaussian Splatting)
 - **Visual Enhancement:** Decart Realtime API
+  - SDK: @decartai/sdk
 
 ## Infrastructure & Deployment
 - **Hosting:** GitHub Pages (Frontend)
