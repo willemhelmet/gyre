@@ -1,17 +1,21 @@
 import { useMemo } from "react";
 import { SplatMesh } from "@sparkjsdev/spark";
+import { useMyStore } from "../store/store";
 
 export const Splat = () => {
-  const splat = useMemo(() => {
-    // Assets are resolved relative to the base URL
-    const baseUrl = import.meta.env.BASE_URL;
-    const splatUrl = baseUrl + "PUT_FILENAME_HERE";
+  const sceneUrl = useMyStore((state) => state.sceneUrl);
 
+  const splat = useMemo(() => {
+    if (!sceneUrl) return null;
+
+    console.log("Loading splat from:", sceneUrl);
     const splatMesh = new SplatMesh({
-      url: splatUrl,
+      url: sceneUrl,
     });
     return splatMesh;
-  }, []);
+  }, [sceneUrl]);
+
+  if (!splat) return null;
 
   return (
     <>

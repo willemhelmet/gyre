@@ -12,6 +12,7 @@ export const ReviewScreen = () => {
   const [refinementPrompt, setRefinementPrompt] = useState(prompt);
   const [isProcessing, setIsProcessing] = useState(false);
   const [pipelineStatus, setPipelineStatus] = useState("");
+  const [selectedModel, setSelectedModel] = useState<"Marble 0.1-mini" | "Marble 0.1-plus">("Marble 0.1-plus");
   const [, setLocation] = useLocation();
 
   const handleReroll = async () => {
@@ -21,8 +22,9 @@ export const ReviewScreen = () => {
       const newUrl = await generateImage(refinementPrompt);
       setGeneratedImage(newUrl);
       setPipelineStatus("");
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      setPipelineStatus(`Error: ${e.message}`);
     } finally {
       setIsProcessing(false);
     }
@@ -34,8 +36,8 @@ export const ReviewScreen = () => {
     setIsProcessing(true);
     
     try {
-      setPipelineStatus("> Marble World Labs: Converting to Splat...");
-      const splatUrl = await convertToSplat(generatedImage);
+      setPipelineStatus(`> Marble World Labs (${selectedModel}): Converting to Splat...`);
+      const splatUrl = await convertToSplat(generatedImage, selectedModel);
       
       setPipelineStatus("> Decart Realtime: Polishing environment...");
       const polishedUrl = await polishEnvironment(splatUrl);
@@ -43,16 +45,15 @@ export const ReviewScreen = () => {
       setSceneUrl(polishedUrl);
       useMyStore.getState().setGameStatus("intro");
       setLocation("/world");
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      setPipelineStatus("Error in pipeline.");
+      setPipelineStatus(`Error: ${e.message}`);
     } finally {
       setIsProcessing(false);
     }
   };
 
   if (!generatedImage) {
-      // Fallback if no image
       return <div className="text-white">No image generated. Please return to start.</div>;
   }
 
@@ -91,11 +92,34 @@ export const ReviewScreen = () => {
                     Regenerate (Re-roll)
                 </button>
             </div>
+
+            {/* Model Selection */}
+            <div className="space-y-2 mb-8">
+                <label className="block text-xs uppercase tracking-widest text-gray-500">
+                    Splat Model
+                </label>
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => setSelectedModel("Marble 0.1-plus")}
+                        className={`flex-1 py-2 text-xs font-bold border ${selectedModel === "Marble 0.1-plus" ? "bg-blue-600 border-blue-600 text-white" : "bg-black border-gray-700 text-gray-400"}`}
+                        disabled={isProcessing}
+                    >
+                        PLUS (Quality)
+                    </button>
+                    <button
+                        onClick={() => setSelectedModel("Marble 0.1-mini")}
+                        className={`flex-1 py-2 text-xs font-bold border ${selectedModel === "Marble 0.1-mini" ? "bg-blue-600 border-blue-600 text-white" : "bg-black border-gray-700 text-gray-400"}`}
+                        disabled={isProcessing}
+                    >
+                        MINI (Speed)
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div>
             {pipelineStatus && (
-                <div className="mb-4 text-xs text-green-400 font-mono animate-pulse">
+                <div className="mb-4 text-xs text-green-400 font-mono animate-pulse break-words">
                     {pipelineStatus}
                 </div>
             )}

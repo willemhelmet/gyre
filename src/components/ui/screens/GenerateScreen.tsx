@@ -6,6 +6,7 @@ import { generateImage } from "../../../services/aiPipeline.ts";
 export const GenerateScreen = () => {
   const [inputPrompt, setInputPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const setPrompt = useMyStore((state) => state.setPrompt);
   const setGeneratedImage = useMyStore((state) => state.setGeneratedImage);
   const [, setLocation] = useLocation();
@@ -14,14 +15,16 @@ export const GenerateScreen = () => {
     if (!inputPrompt) return;
 
     setIsGenerating(true);
+    setError(null);
     setPrompt(inputPrompt);
 
     try {
       const imageUrl = await generateImage(inputPrompt);
       setGeneratedImage(imageUrl);
       setLocation("/review");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Generation failed:", error);
+      setError(error.message || "Failed to generate image. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -44,6 +47,12 @@ export const GenerateScreen = () => {
             disabled={isGenerating}
           />
         </div>
+
+        {error && (
+          <div className="mt-4 p-3 bg-red-900/30 border border-red-500 text-red-400 text-sm">
+            {error}
+          </div>
+        )}
 
         <div className="mt-8 flex justify-end">
           <button

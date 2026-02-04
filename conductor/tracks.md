@@ -4,6 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Implement Marble API Gaussian Splat generation process.**
+- [x] **Track: Implement Marble API Gaussian Splat generation process.**
   *Link: [./tracks/marble_api_gen_20260204/](./tracks/marble_api_gen_20260204/)*
 
