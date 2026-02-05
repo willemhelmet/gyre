@@ -143,3 +143,17 @@ export const polishEnvironment = async (splatData: string): Promise<string> => {
   console.log(`[Decart Realtime] Polish complete.`);
   return splatData;
 };
+
+export const loadTemplateWorld = async (worldId: string): Promise<string> => {
+  console.log(`[Community] Loading template world: ${worldId}...`);
+  
+  const worldDetails = await marbleClient.getWorld(worldId);
+  const detailSpzUrls = worldDetails.assets?.splats?.spz_urls;
+  
+  if (!detailSpzUrls) throw new Error("No Gaussian Splat assets found in template");
+  
+  const firstDetailKey = Object.keys(detailSpzUrls)[0];
+  console.log(`[Community] Template loaded. Asset: ${detailSpzUrls[firstDetailKey]}`);
+  
+  return detailSpzUrls[firstDetailKey];
+};
