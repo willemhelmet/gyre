@@ -14,9 +14,11 @@ interface DecartStreamProps {
 export const DecartStream = ({ canvasId }: DecartStreamProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sourceVideoRef = useRef<HTMLVideoElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const prompt = useMyStore((state) => state.prompt);
+  const setEditingPrompt = useMyStore((state) => state.setEditingPrompt);
   const [currentPrompt, setCurrentPrompt] = useState(prompt || "");
   const clientRef = useRef<DecartClient | null>(null);
   const promptRef = useRef(prompt);
@@ -75,6 +77,23 @@ export const DecartStream = ({ canvasId }: DecartStreamProps) => {
           console.log("Updating Decart prompt:", currentPrompt);
           clientRef.current.setPrompt(currentPrompt);
       }
+      inputRef.current?.blur();
+  };
+
+  const handleInputFocus = () => {
+    setEditingPrompt(true);
+    document.exitPointerLock();
+  };
+
+  const handleInputBlur = () => {
+    setEditingPrompt(false);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent) => {
+    e.stopPropagation();
+    if (e.key === "Escape") {
+      inputRef.current?.blur();
+    }
   };
 
   if (error) {
@@ -122,10 +141,14 @@ export const DecartStream = ({ canvasId }: DecartStreamProps) => {
       {isConnected && (
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-lg pointer-events-auto">
               <form onSubmit={handlePromptSubmit} className="flex gap-2">
-                  <input 
-                    type="text" 
+                  <input
+                    ref={inputRef}
+                    type="text"
                     value={currentPrompt}
                     onChange={(e) => setCurrentPrompt(e.target.value)}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                    onKeyDown={handleInputKeyDown}
                     className="flex-1 bg-black/50 backdrop-blur-md border border-gray-600 text-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none rounded-none"
                     placeholder="Describe the visual style..."
                   />

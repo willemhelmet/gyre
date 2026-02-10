@@ -8,6 +8,7 @@ export interface GameSlice {
   prompt: string;
   generatedImage: string | null;
   sceneUrl: string | null;
+  isEditingPrompt: boolean;
   start: () => void;
   pause: () => void;
   resume: () => void;
@@ -15,6 +16,7 @@ export interface GameSlice {
   setGeneratedImage: (url: string | null) => void;
   setSceneUrl: (url: string) => void;
   setGameStatus: (status: GameStatus) => void;
+  setEditingPrompt: (editing: boolean) => void;
 }
 
 export const createGameSlice: StateCreator<
@@ -28,6 +30,7 @@ export const createGameSlice: StateCreator<
   prompt: "",
   generatedImage: null,
   sceneUrl: null,
+  isEditingPrompt: false,
   start: () => set(() => ({ status: "playing" })),
   pause: () => set(() => ({ status: "paused" })),
   resume: () => set(() => ({ status: "playing" })),
@@ -35,4 +38,5 @@ export const createGameSlice: StateCreator<
   setGeneratedImage: (url) => set(() => ({ generatedImage: url })),
   setSceneUrl: (url) => set(() => ({ sceneUrl: url })),
   setGameStatus: (status) => set(() => ({ status })),
+  setEditingPrompt: (editing) => set(() => ({ isEditingPrompt: editing })),
 });
