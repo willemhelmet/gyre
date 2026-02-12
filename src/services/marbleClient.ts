@@ -11,26 +11,7 @@ const headers = {
 };
 
 export const marbleClient = {
-  async prepareUpload(filename: string, extension: string, kind: string) {
-    const response = await fetch(`${MARBLE_API_URL}/media-assets:prepare_upload`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        file_name: filename,
-        extension,
-        kind,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Prepare upload failed: ${errorText}`);
-    }
-
-    return await response.json();
-  },
-
-  async generateWorld(mediaAssetId: string, model: string = "Marble 0.1-plus") {
+  async generateWorld(base64Data: string, extension: string, model: string = "Marble 0.1-plus") {
     const response = await fetch(`${MARBLE_API_URL}/worlds:generate`, {
       method: "POST",
       headers,
@@ -38,8 +19,9 @@ export const marbleClient = {
         world_prompt: {
           type: "image",
           image_prompt: {
-            source: "media_asset",
-            media_asset_id: mediaAssetId,
+            source: "data_base64",
+            data_base64: base64Data,
+            extension,
           },
         },
         model,

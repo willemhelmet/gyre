@@ -1,19 +1,6 @@
 import { ai } from "./geminiClient";
 import { marbleClient } from "./marbleClient";
 
-// Helper to convert data URL to Blob
-const dataURLtoBlob = (dataurl: string) => {
-  const arr = dataurl.split(',');
-  const mime = arr[0].match(/:(.*?);/)![1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-  while(n--){
-      u8arr[n] = bstr.charCodeAt(n);
-  }
-  return new Blob([u8arr], {type:mime});
-}
-
 // AI Pipeline Service
 
 export const generateImage = async (prompt: string): Promise<string> => {
@@ -58,36 +45,12 @@ export const generateImage = async (prompt: string): Promise<string> => {
   }
 };
 
-const uploadMediaAsset = async (dataUrl: string): Promise<string> => {
-  console.log("[Marble] Preparing upload...");
-  const blob = dataURLtoBlob(dataUrl);
-  
-  // 1. Prepare Upload via Frontend Client
-  const { upload_info, media_asset } = await marbleClient.prepareUpload(
-    "generated_image.png",
-    "png",
-    "image"
-  );
-
-  // 2. Upload File with REQUIRED HEADERS
-  console.log("[Marble] Uploading to signed URL with headers:", upload_info.required_headers);
-  
-  const uploadRes = await fetch(upload_info.upload_url, {
-    method: "PUT",
-    headers: {
-      ...upload_info.required_headers, // CRITICAL: Must include all headers returned by Marble
-    },
-    body: blob
-  });
-
-  if (!uploadRes.ok) {
-    const errorText = await uploadRes.text();
-    console.error("[Marble] Upload failed body:", errorText);
-    throw new Error(`Failed to upload file to Marble: ${uploadRes.status} ${uploadRes.statusText}`);
-  }
-  
-  console.log("[Marble] Upload complete.");
-  return media_asset.media_asset_id;
+const extractBase64FromDataUrl = (dataUrl: string): { base64: string; extension: string } => {
+  const [header, base64] = dataUrl.split(',');
+  const mimeMatch = header.match(/:(.*?);/);
+  const mime = mimeMatch ? mimeMatch[1] : 'image/png';
+  const extension = mime.split('/')[1] || 'png';
+  return { base64, extension };
 };
 
 const pollOperation = async (operationId: string): Promise<string> => {
@@ -126,12 +89,12 @@ const pollOperation = async (operationId: string): Promise<string> => {
 
 export const convertToSplat = async (imageUrl: string, model: "Marble 0.1-mini" | "Marble 0.1-plus" = "Marble 0.1-plus"): Promise<string> => {
   console.log(`[Marble World Labs] Starting conversion pipeline with model: ${model}...`);
-  
-  const mediaAssetId = await uploadMediaAsset(imageUrl);
-  console.log(`[Marble] Media Asset ID: ${mediaAssetId}`);
 
-  console.log("[Marble] Requesting world generation...");
-  const { operation_id } = await marbleClient.generateWorld(mediaAssetId, model);
+  const { base64, extension } = extractBase64FromDataUrl(imageUrl);
+  console.log(`[Marble] Extracted base64 (${Math.round(base64.length / 1024)}KB), extension: ${extension}`);
+
+  console.log("[Marble] Requesting world generation with inline base64...");
+  const { operation_id } = await marbleClient.generateWorld(base64, extension, model);
   console.log(`[Marble] Operation ID: ${operation_id}`);
 
   return await pollOperation(operation_id);
