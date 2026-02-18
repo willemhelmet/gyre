@@ -1,46 +1,17 @@
-import { ai } from "./geminiClient";
+import { lucyProClient } from "./lucyProClient";
 import { marbleClient } from "./marbleClient";
 
 // AI Pipeline Service
 
 export const generateImage = async (prompt: string): Promise<string> => {
-  console.log(`[Nano Banana] Generating image for prompt: "${prompt}"...`);
-  
+  console.log(`[Lucy-Pro] Generating image for prompt: "${prompt}"...`);
+
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-pro-image-preview",
-      contents: prompt,
-      config: {
-        responseModalities: ["IMAGE"],
-        imageConfig: {
-          aspectRatio: "16:9",
-          imageSize: "2K",
-        },
-      },
-    });
-
-    console.log("[Nano Banana] API Response received:", response);
-
-    response.candidates?.[0]?.content?.parts?.forEach((part, index) => {
-      if (part.thought) {
-        console.log(`[Nano Banana] Thought Part ${index}:`, part.text || "Thought Image/Data");
-      }
-    });
-
-    const part = response.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
-    
-    if (part?.inlineData?.data) {
-      const base64Data = part.inlineData.data;
-      const mimeType = part.inlineData.mimeType || "image/png";
-      const dataUrl = `data:${mimeType};base64,${base64Data}`;
-      
-      console.log(`[Nano Banana] Image generated successfully.`);
-      return dataUrl;
-    } else {
-      throw new Error("No image data found in response");
-    }
+    const dataUrl = await lucyProClient.generateImage(prompt, "720p");
+    console.log(`[Lucy-Pro] Image generated successfully.`);
+    return dataUrl;
   } catch (error) {
-    console.error("[Nano Banana] Generation failed:", error);
+    console.error("[Lucy-Pro] Generation failed:", error);
     throw error;
   }
 };

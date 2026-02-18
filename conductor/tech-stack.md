@@ -10,8 +10,8 @@
 - **Language:** TypeScript
 
 ## AI Pipeline Integrations
-- **Image Generation:** Nano Banana API
-  - SDK: @google/genai
+- **Image Generation:** Decart Lucy-Pro API
+  - Client: Raw fetch (REST + FormData)
 - **3D Reconstruction:** Marble World Labs API (Gaussian Splatting)
 - **Visual Enhancement:** Decart Realtime API
   - SDK: @decartai/sdk

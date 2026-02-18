@@ -77,7 +77,7 @@ export const GenerateScreen = () => {
             </button>
              {isGenerating && (
                 <div className="mt-4 text-xs text-gray-500 font-mono animate-pulse">
-                    {'>'} Nano Banana Protocol: ACTIVE
+                    {'>'} Lucy-Pro Protocol: ACTIVE
                     <br/>
                     {'>'} Synthesizing pixels...
                 </div>
