@@ -21,7 +21,7 @@ export const ReviewScreen = () => {
 
   const handleReroll = async () => {
     setIsProcessing(true);
-    setPipelineStatus("> Re-initializing Nano Banana...");
+    setPipelineStatus("> Re-initializing Lucy-Pro...");
     try {
       const newUrl = await generateImage(refinementPrompt);
       setGeneratedImage(newUrl);

@@ -12,7 +12,7 @@
 ## User Experience (UX) Principles
 - **Clarity through Contrast:** Use the high-contrast palette to guide the user's eye to primary actions (Generate, Review, Enter World).
 - **Immersive Feedback:** While the UI is minimalist (showing a simple "Loading..." screen), the background operations should be extremely transparent to developers.
-- **Developer Transparency:** **CRITICAL:** The application must `console.log` every step of the AI pipeline (Nano Banana, Marble World Labs, Decart) to facilitate debugging and understanding of the sequence.
+- **Developer Transparency:** **CRITICAL:** The application must `console.log` every step of the AI pipeline (Lucy-Pro, Marble World Labs, Decart) to facilitate debugging and understanding of the sequence.
 
 ## Interaction Design
 - **Step-by-Step Flow:** The UI should strictly follow the sequential nature of the pipeline (Hero -> Generate -> Review/Edit -> 3D World).

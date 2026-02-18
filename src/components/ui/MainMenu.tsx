@@ -53,7 +53,7 @@ export const MainMenu = () => {
         <div className="flex flex-col items-center justify-center border border-gray-800 p-8 bg-gray-900/30 backdrop-blur-sm gap-6">
             <div className="text-2xl font-bold">CREATE NEW</div>
             <p className="text-center text-gray-400 text-sm h-12">
-                Generate a world from scratch using Nano Banana AI or upload your own image.
+                Generate a world from scratch using Lucy-Pro AI or upload your own image.
             </p>
             <button
                 className="px-8 py-4 text-lg font-bold text-black bg-white hover:bg-blue-400 hover:text-white transition-all cursor-pointer border-2 border-white w-full max-w-xs"

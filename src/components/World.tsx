@@ -19,6 +19,7 @@ export const World = () => {
   const resume = useMyStore((state) => state.resume);
 
   const handleUnlock = () => {
+    if (useMyStore.getState().isEditingPrompt) return;
     if (status === "playing") {
       pause();
     }
@@ -64,7 +65,7 @@ export const World = () => {
         We center it in the viewport with a black background.
       */}
       <div className="flex h-screen w-screen items-center justify-center bg-black">
-        <div style={{ width: "1280px", height: "704px", position: "relative" }}>
+        <div id="resume-area" style={{ width: "1280px", height: "704px", position: "relative" }}>
             
             <DecartStream canvasId="three-canvas" />
 
@@ -92,7 +93,7 @@ export const World = () => {
                 <Scene />
                 {!isMobile && (
                 <PointerLockControls
-                    selector="#playButton"
+                    selector="#playButton, #resume-area"
                     onUnlock={handleUnlock}
                     onLock={handleLock}
                 />

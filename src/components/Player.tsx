@@ -6,7 +6,8 @@ import { useEffect } from "react";
 export const Player = () => {
   const camera = useThree((state) => state.camera);
   const status = useMyStore((state) => state.status);
-  const paused = status !== "playing";
+  const isEditingPrompt = useMyStore((state) => state.isEditingPrompt);
+  const paused = status !== "playing" || isEditingPrompt;
 
   useEffect(() => {
     // Ensure rotation order avoids gimbal lock issues

@@ -3,15 +3,15 @@ i am going to create a multi-screen application, where there will be a intro/her
 
 ## Target Users
 - Creative professionals looking to generate and visualize 3D environments from images.
-- Developers and enthusiasts exploring cutting-edge AI pipelines (Nano Banana, Marble World Labs, Decart Realtime).
+- Developers and enthusiasts exploring cutting-edge AI pipelines (Lucy-Pro, Marble World Labs, Decart Realtime).
 
 ## Core Vision
-Genie is a high-fidelity AI-to-3D pipeline that transforms text prompts into immersive interactive environments. It leverages a sophisticated sequence of AI models: image generation via Nano Banana, Gaussian Splat conversion via Marble World Labs, and a final real-time AI polish layer via Decart Realtime API.
+Genie is a high-fidelity AI-to-3D pipeline that transforms text prompts into immersive interactive environments. It leverages a sophisticated sequence of AI models: image generation via Lucy-Pro, Gaussian Splat conversion via Marble World Labs, and a final real-time AI polish layer via Decart Realtime API.
 
 ## Key Features
 - **Hero Gallery:** An immersive intro screen showcasing community worlds with a clear path to start a new creation.
 - **AI Pipeline Integration:**
-    - **Nano Banana:** Initial image generation from text prompts.
+    - **Lucy-Pro:** Initial image generation from text prompts.
     - **User Upload:** Option to upload existing 2D images directly.
     - **Community Templates:** Direct access to curated, pre-generated 3D worlds.
     - **Review & Refine:** A dedicated interface to view generated images and iterate using prompt refinement.
